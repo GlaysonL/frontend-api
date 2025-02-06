@@ -10,6 +10,7 @@ import { Produto } from 'src/app/model/produto.model';
 export class ProdutoComponent implements OnInit {
   produtos: Produto[] = [];
   novoProduto: Produto = new Produto();
+  produtoParaEditar: Produto | null = null;
 
   constructor(private produtoService: ProdutoService) {}
 
@@ -35,11 +36,26 @@ export class ProdutoComponent implements OnInit {
     console.log('Cadastrando produto:', this.novoProduto);
     this.produtoService.salvar(this.novoProduto).subscribe(
       () => {
-
         this.carregarProdutos();
         this.novoProduto = new Produto();
       },
       error => console.error('Erro ao cadastrar produto:', error)
     );
+  }
+
+  editarProduto(produto: Produto): void {
+    this.produtoParaEditar = { ...produto };
+  }
+
+  atualizarProduto(): void {
+    if (this.produtoParaEditar) {
+      this.produtoService.atualizar(this.produtoParaEditar.id!, this.produtoParaEditar).subscribe(
+        () => {
+          this.carregarProdutos();
+          this.produtoParaEditar = null;
+        },
+        error => console.error('Erro ao atualizar produto:', error)
+      );
+    }
   }
 }

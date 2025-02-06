@@ -43,6 +43,12 @@ export class ProdutoService {
     );
   }
 
+  atualizar(id: number, produto: Produto): Observable<Produto> {
+    return this.http.put<Produto>(`${this.apiUrl}/${id}`, produto).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   deletar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
